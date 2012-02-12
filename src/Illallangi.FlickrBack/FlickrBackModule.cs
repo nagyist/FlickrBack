@@ -25,6 +25,15 @@ namespace Illallangi.FlickrBack
 
         #endregion
 
+        #region Properties
+
+        private string[] Arguments
+        {
+            get { return this.currentArguments; }
+        }
+
+        #endregion
+
         #region Methods
 
         public override void Load()
@@ -32,15 +41,6 @@ namespace Illallangi.FlickrBack
             Bind<IConfig>().ToMethod(c => XMLConfig.FromFile()).InSingletonScope();
             Bind<IFlickrWrapper>().To<FlickrWrapper>().InSingletonScope();
             Bind<IDriver>().To<Program>().WithConstructorArgument("arguments", this.Arguments);
-        }
-
-        #endregion
-
-        #region Properties
-
-        private string[] Arguments
-        {
-            get { return this.currentArguments; }
         }
 
         #endregion

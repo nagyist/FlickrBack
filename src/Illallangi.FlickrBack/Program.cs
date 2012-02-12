@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="Driver.cs" company="Illallangi Enterprises">
+// <copyright file="Program.cs" company="Illallangi Enterprises">
 // Copyright (C) 2012 Illallangi Enterprises
 // </copyright>
 // -----------------------------------------------------------------------
@@ -94,7 +94,7 @@ namespace Illallangi.FlickrBack
                     Console.WriteLine("{0}\\{1}.{2}", targetName ?? "NoContext", photo.Title, photo.OriginalFormat);
                     
                     var path = Path.GetFullPath(targetName ?? "NoContext");
-                    var filename = Path.Combine(path, String.Format("{0}.{1}", photo.Title, photo.OriginalFormat));
+                    var filename = Path.Combine(path, string.Format("{0}.{1}", photo.Title, photo.OriginalFormat));
 
                     if (!Directory.Exists(path))
                     {

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Illallangi.FlickrBack</RootNamespace>
     <AssemblyName>FlickrBack</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,17 +37,16 @@
     <StartupObject>Illallangi.FlickrBack.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FlickrNet">
+    <Reference Include="FlickrNet, Version=3.3.1.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
       <HintPath>..\packages\FlickrNet.3.3.1\lib\net20\FlickrNet.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Client\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.2.2.1.4\lib\net35-Client\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -56,7 +55,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="FlickrWrapper.cs" />
     <Compile Include="IConfig.cs" />
-    <Compile Include="FlickrConModule.cs" />
+    <Compile Include="FlickrBackModule.cs" />
     <Compile Include="IFlickrWrapper.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="XMLBackedFile.cs" />

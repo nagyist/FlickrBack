@@ -68,15 +68,22 @@ namespace Illallangi.FlickrBack
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.ApiKey) || 
-                    string.IsNullOrWhiteSpace(this.ApiSecret) ||
-                    XMLConfig.DEFAULTAPIKEY == this.ApiKey ||
-                    XMLConfig.DEFAULTAPISECRET == this.ApiSecret)
+                if (null == this.currentFlickr)
                 {
-                    throw new Exception("Please ensure Key and Secret are set in the FlickrBack.xml file.");
+                    if (null == this.ApiKey ||
+                        null == this.ApiSecret ||
+                        string.Empty == this.ApiKey.Trim() ||
+                        string.Empty == this.ApiKey.Trim() ||
+                        XMLConfig.DEFAULTAPIKEY == this.ApiKey ||
+                        XMLConfig.DEFAULTAPISECRET == this.ApiSecret)
+                    {
+                        throw new Exception("Please ensure Key and Secret are set in the FlickrBack.xml file.");
+                    }
+
+                    this.currentFlickr = new Flickr(this.ApiKey, this.ApiSecret, this.currentToken);
                 }
-                return this.currentFlickr ??
-                       (this.currentFlickr = new Flickr(this.ApiKey, this.ApiSecret, this.currentToken));
+
+                return this.currentFlickr;
             }
         }
 
