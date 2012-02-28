@@ -6,9 +6,9 @@
 
 using Ninject.Modules;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
-    public sealed class FlickrBackModule : NinjectModule
+    public sealed class FlickrModule<T> : NinjectModule where T: IDriver
     {
         #region Fields
 
@@ -18,7 +18,7 @@ namespace Illallangi.FlickrBack
 
         #region Constructor
 
-        public FlickrBackModule(string[] arguments)
+        public FlickrModule(string[] arguments)
         {
             this.currentArguments = arguments;
         }
@@ -40,7 +40,7 @@ namespace Illallangi.FlickrBack
         {
             Bind<IConfig>().ToMethod(c => XMLConfig.FromFile()).InSingletonScope();
             Bind<IFlickrWrapper>().To<FlickrWrapper>().InSingletonScope();
-            Bind<IDriver>().To<Program>().WithConstructorArgument("arguments", this.Arguments);
+            Bind<IDriver>().To<T>().WithConstructorArgument("arguments", this.Arguments);
         }
 
         #endregion

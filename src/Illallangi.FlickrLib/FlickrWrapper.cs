@@ -4,10 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
+using System.Net;
 using FlickrNet;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     public sealed class FlickrWrapper : IFlickrWrapper
     {
@@ -45,11 +47,41 @@ namespace Illallangi.FlickrBack
 
         public PhotoInfo GetPhoto(string photoId)
         {
+            for (var i = 1; i < this.Config.Retries; i++)
+            {
+                try
+                {
+                    return this.Flickr.PhotosGetInfo(photoId);
+                }
+                catch (FlickrWebException f)
+                {
+                    Console.WriteLine("{0}, retrying", f.GetType());
+                }
+                catch (WebException w)
+                {
+                    Console.WriteLine("{0}, retrying", w.GetType());
+                }
+            }
             return this.Flickr.PhotosGetInfo(photoId);
         }
 
         public Photoset GetPhotoset(string photosetId)
         {
+            for (var i = 1; i < this.Config.Retries; i++)
+            {
+                try
+                {
+                    return this.Flickr.PhotosetsGetInfo(photosetId);
+                }
+                catch (FlickrWebException f)
+                {
+                    Console.WriteLine("{0}, retrying", f.GetType());
+                }
+                catch (WebException w)
+                {
+                    Console.WriteLine("{0}, retrying", w.GetType());
+                }
+            }
             return this.Flickr.PhotosetsGetInfo(photosetId);
         }
 
@@ -58,7 +90,25 @@ namespace Illallangi.FlickrBack
             PhotosetCollection collection = null;
             do
             {
-                collection = this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
+                for (var i = 1; i < this.Config.Retries; i++)
+                {
+                    try
+                    {
+                        collection = this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
+                    }
+                    catch (FlickrWebException f)
+                    {
+                        Console.WriteLine("{0}, retrying", f.GetType());
+                    }
+                    catch (WebException w)
+                    {
+                        Console.WriteLine("{0}, retrying", w.GetType());
+                    }
+                }
+                if (null == collection)
+                {
+                    collection = this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
+                }
                 foreach (var set in collection)
                 {
                     yield return set.PhotosetId;
@@ -77,7 +127,7 @@ namespace Illallangi.FlickrBack
                 {
                     yield return photo.PhotoId;
                 }
-            } 
+            }
             while (collection.Page < collection.Pages);
         }
 

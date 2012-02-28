@@ -6,7 +6,7 @@
 
 using FlickrNet;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     public interface IConfig
     {
@@ -21,6 +21,8 @@ namespace Illallangi.FlickrBack
         string Frob { get; }
 
         string Token { get; }
+
+        int Retries { get; }
 
         #endregion
     }

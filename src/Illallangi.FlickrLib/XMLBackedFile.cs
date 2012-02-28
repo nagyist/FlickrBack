@@ -8,7 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     /// <summary>
     /// An class that allows serializing to and deserializing from a XML file.

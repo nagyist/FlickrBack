@@ -4,7 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     public interface IDriver
     {

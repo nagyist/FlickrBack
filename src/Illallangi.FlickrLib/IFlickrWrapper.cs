@@ -7,7 +7,7 @@
 using System.Collections.Generic;
 using FlickrNet;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     public interface IFlickrWrapper
     {

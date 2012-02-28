@@ -10,7 +10,7 @@ using System.IO;
 using System.Xml.Serialization;
 using FlickrNet;
 
-namespace Illallangi.FlickrBack
+namespace Illallangi.FlickrLib
 {
     [XmlRoot("config")]
     public sealed class XMLConfig : XMLBackedFile<XMLConfig>, IConfig
@@ -101,6 +101,9 @@ namespace Illallangi.FlickrBack
             set { this.currentToken = value; }
         }
 
+        [XmlAttribute("retries")]
+        public int Retries { get; set; }
+
         #endregion
 
         #region Private Properties
@@ -108,7 +111,7 @@ namespace Illallangi.FlickrBack
         // TODO: Fix This
         private static string FileName
         {
-            get { return "FlickrBack.xml"; }
+            get { return "Flickr.xml"; }
         }
 
         #endregion

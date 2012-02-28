@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FE867DE3-7FB2-4E2F-98A5-53CA21426C53}</ProjectGuid>
+    <ProjectGuid>{E57A7D4B-E0DD-4326-88D5-95EDA54B5D17}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Illallangi.FlickrBack</RootNamespace>
-    <AssemblyName>FlickrBack</AssemblyName>
+    <RootNamespace>Illallangi.FlickrUp</RootNamespace>
+    <AssemblyName>FlickrUp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Illallangi.FlickrBack.Program</StartupObject>
+    <StartupObject>Illallangi.FlickrUp.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FlickrNet, Version=3.3.1.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
@@ -51,10 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Program.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Program.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
