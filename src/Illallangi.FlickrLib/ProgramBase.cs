@@ -35,7 +35,7 @@ namespace Illallangi.FlickrLib
 
         #region Properties
 
-        private string[] Arguments
+        protected string[] Arguments
         {
             get { return this.currentArguments; }
         }

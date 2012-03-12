@@ -6,6 +6,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using FlickrNet;
 
@@ -119,21 +120,51 @@ namespace Illallangi.FlickrLib
 
         public IEnumerable<string> GetPhotosetPhotoIds(string photosetId)
         {
+            return this.GetPhotosetPhotos(photosetId).Select(photo => photo.PhotoId);
+        }
+
+        public IEnumerable<Photo> GetPhotosetPhotos(string photosetId)
+        {
             PhotosetPhotoCollection collection = null;
             do
             {
                 collection = this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
                 foreach (var photo in collection)
                 {
-                    yield return photo.PhotoId;
+                    yield return photo;
                 }
             }
             while (collection.Page < collection.Pages);
         }
 
+        public string Upload(string fileName, string title)
+        {
+            return this.Flickr.UploadPicture(fileName, title);
+        }
+
         public AllContexts PhotosGetAllContexts(string photoId)
         {
             return this.Flickr.PhotosGetAllContexts(photoId);
+        }
+
+        public PhotosetCollection PhotosetsGetList()
+        {
+            return this.PhotosetsGetList(false);
+        }
+
+        public PhotosetCollection PhotosetsGetList(bool clearCache)
+        {
+            if (clearCache)
+            {
+                this.Flickr.PhotosetsGetList();
+                Flickr.FlushCache(this.Flickr.LastRequest);
+            }
+            return this.Flickr.PhotosetsGetList();
+        }
+
+        public Photoset CreatePhotoset(string collectionName, string photoId)
+        {
+            return this.Flickr.PhotosetsCreate(collectionName, photoId);
         }
 
         #endregion

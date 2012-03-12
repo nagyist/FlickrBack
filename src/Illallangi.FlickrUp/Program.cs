@@ -5,9 +5,12 @@
 // -----------------------------------------------------------------------
 
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Text;
+using System.Linq;
+using FlickrNet;
 using Illallangi.FlickrLib;
 using Ninject;
 
@@ -33,50 +36,45 @@ namespace Illallangi.FlickrUp
 
         public override void Execute()
         {
-            var seenPhoto = new Collection<string>();
-
-            foreach (var setId in this.Flickr.GetPhotosetIds())
+            foreach (var folder in this.Folders)
             {
-                foreach (var photoId in this.Flickr.GetPhotosetPhotoIds(setId))
+                var collectionName = Path.GetFileName(folder);
+                var photoSet = this.Flickr.PhotosetsGetList(true).Where(p => p.Title == collectionName).FirstOrDefault();
+
+                foreach (var file in Directory.GetFiles(folder, "*.jpg"))
                 {
-                    if (seenPhoto.Contains(photoId))
+                    if (null == photoSet || this.Flickr.GetPhotosetPhotos(photoSet.PhotosetId).Any(p => Path.GetFileNameWithoutExtension(file) == p.Title))
                     {
-                        continue;
-                    }
-
-                    seenPhoto.Add(photoId);
-
-                    var minSize = -1;
-                    string targetName = null;
-
-                    var photo = this.Flickr.GetPhoto(photoId);
-
-                    foreach (var contextSet in this.Flickr.PhotosGetAllContexts(photoId).Sets)
-                    {
-                        var photoset = this.Flickr.GetPhotoset(contextSet.PhotosetId);
-                        if (-1 != minSize && photoset.NumberOfPhotos >= minSize)
+                        Console.WriteLine("Uploading {0}", file);
+                        //var photoId = this.Flickr.Upload(Path.Combine(folder, file), Path.GetFileNameWithoutExtension(file));
+                        if (null == photoSet)
                         {
-                            continue;
+                          //  photoSet = this.Flickr.CreatePhotoset(collectionName, photoId);
                         }
-
-                        minSize = photoset.NumberOfPhotos;
-                        targetName = photoset.Title;
+                        else
+                        {
+                            // Add photo to xphotoset
+                        }
+                        // Console.WriteLine("Creating {0}", collectionName);
                     }
+                }
 
-                    Console.WriteLine("{0}\\{1}.{2}", targetName ?? "NoContext", photo.Title, photo.OriginalFormat);
+            }
+        }
 
-                    var path = Path.GetFullPath(targetName ?? "NoContext");
-                    var filename = Path.Combine(path, string.Format("{0}.{1}", photo.Title, photo.OriginalFormat));
+        private IEnumerable<string> Folders
+        {
+            get
+            {
+                var sb = new StringBuilder();
+                foreach (var arg in this.Arguments)
+                {
+                    sb.AppendFormat(" {0}", arg);
 
-                    if (!Directory.Exists(path))
-                    {
-                        Directory.CreateDirectory(path);
-                    }
+                    if (0 == sb.Length || !Directory.Exists(Path.GetFullPath(sb.ToString().Trim()))) continue;
 
-                    if (!File.Exists(filename))
-                    {
-                        this.WebClient.DownloadFile(photo.OriginalUrl, filename);
-                    }
+                    yield return Path.GetFullPath(sb.ToString().Trim());
+                    sb.Remove(0, sb.Length);
                 }
             }
         }

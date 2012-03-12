@@ -140,7 +140,7 @@ namespace Illallangi.FlickrLib
 
         private string GetToken()
         {
-            Process.Start(this.Flickr.AuthCalcUrl(this.Frob, AuthLevel.Read));
+            Process.Start(this.Flickr.AuthCalcUrl(this.Frob, AuthLevel.Write));
             Console.Write("Press any key to continue...");
             Console.ReadLine();
             return this.Flickr.AuthToken = this.Flickr.AuthGetToken(this.Frob).Token;

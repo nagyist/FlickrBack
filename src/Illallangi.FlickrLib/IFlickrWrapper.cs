@@ -19,10 +19,19 @@ namespace Illallangi.FlickrLib
 
         IEnumerable<string> GetPhotosetIds();
 
+        string Upload(string fileName, string title);
+
+        IEnumerable<Photo> GetPhotosetPhotos(string photosetId);
+
         IEnumerable<string> GetPhotosetPhotoIds(string photosetId);
 
         AllContexts PhotosGetAllContexts(string photoId);
 
+        PhotosetCollection PhotosetsGetList();
+        PhotosetCollection PhotosetsGetList(bool clearCache);
+
         #endregion
+
+        Photoset CreatePhotoset(string collectionName, string photoId);
     }
 }
