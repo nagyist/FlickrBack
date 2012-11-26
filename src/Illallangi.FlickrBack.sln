@@ -1,11 +1,18 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Illallangi.FlickrBack", "Illallangi.FlickrBack\Illallangi.FlickrBack.csproj", "{FE867DE3-7FB2-4E2F-98A5-53CA21426C53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Illallangi.FlickrUp", "Illallangi.FlickrUp\Illallangi.FlickrUp.csproj", "{E57A7D4B-E0DD-4326-88D5-95EDA54B5D17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Illallangi.FlickrLib", "Illallangi.FlickrLib\Illallangi.FlickrLib.csproj", "{F778132B-F1EC-412B-B4C5-A21D38055273}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D3C32BF1-A1A4-4303-B039-DFDE16A4E7EB}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
