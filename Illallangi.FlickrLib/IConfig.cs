@@ -23,6 +23,8 @@ namespace Illallangi.FlickrLib
         string Token { get; }
 
         int Retries { get; }
+        int MinDelay { get; }
+        int MaxDelay { get; }
 
         #endregion
     }

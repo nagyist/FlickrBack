@@ -21,7 +21,10 @@ namespace Illallangi.FlickrLib
 
         private const string DEFAULTAPIKEY = "Insert your Flickr API Key here.";
         private const string DEFAULTAPISECRET = "Insert your Flickr API Secret here.";
-
+        private const int DEFAULTRETRIES = -1;
+        private const int DEFAULTMINDELAY = 5;
+        private const int DEFAULTMAXDELAY = 60;
+        
         #endregion
 
         #region Private Fields
@@ -31,6 +34,9 @@ namespace Illallangi.FlickrLib
         private Flickr currentFlickr;
         private string currentFrob;
         private string currentToken;
+        private int? currentRetries;
+        private int? currentMinDelay;
+        private int? currentMaxDelay;
 
         #endregion
 
@@ -102,7 +108,25 @@ namespace Illallangi.FlickrLib
         }
 
         [XmlAttribute("retries")]
-        public int Retries { get; set; }
+        public int Retries
+        {
+            get { return this.currentRetries.HasValue ? this.currentRetries.Value : (this.currentRetries = XmlConfig.DEFAULTRETRIES).Value; }
+            set { this.currentRetries = value; }
+        }
+
+        [XmlAttribute("mindelay")]
+        public int MinDelay
+        {
+            get { return this.currentMinDelay.HasValue ? this.currentMinDelay.Value : (this.currentMinDelay = XmlConfig.DEFAULTMINDELAY).Value; }
+            set { this.currentMinDelay = value; }
+        }
+
+        [XmlAttribute("maxdelay")]
+        public int MaxDelay
+        {
+            get { return this.currentMaxDelay.HasValue ? this.currentMaxDelay.Value : (this.currentMaxDelay = XmlConfig.DEFAULTMAXDELAY).Value; }
+            set { this.currentMaxDelay = value; }
+        }
 
         #endregion
 
