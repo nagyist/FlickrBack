@@ -2,6 +2,9 @@
 [Tt]humbs.db
 *.DS_Store
 
+#NuGet packages folder
+packages/
+
 #Visual Studio files
 *.[Oo]bj
 *.exe
