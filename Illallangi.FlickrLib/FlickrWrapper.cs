@@ -7,7 +7,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using FlickrNet;
 
 namespace Illallangi.FlickrLib
@@ -17,24 +16,31 @@ namespace Illallangi.FlickrLib
         #region Fields
 
         private readonly IConfig currentConfig;
+        private readonly IEnumerable<IRetrier> currentRetriers;
         private const int PAGESIZE = 10;
 
         #endregion
 
         #region Constructors
 
-        public FlickrWrapper(IConfig config)
+        public FlickrWrapper(IConfig config, IEnumerable<IRetrier> retriers)
         {
             this.currentConfig = config;
+            this.currentRetriers = retriers;
         }
 
         #endregion
 
         #region Properties
 
-        public IConfig Config
+        private IConfig Config
         {
             get { return this.currentConfig; }
+        }
+
+        private IEnumerable<IRetrier> Retriers
+        {
+            get { return this.currentRetriers; }
         }
 
         private Flickr Flickr
@@ -46,44 +52,20 @@ namespace Illallangi.FlickrLib
 
         #region Methods
 
-        public PhotoInfo GetPhoto(string photoId)
+        private T Retry<T>(Func<T> func)
         {
-            for (var i = 1; i < this.Config.Retries; i++)
-            {
-                try
-                {
-                    return this.Flickr.PhotosGetInfo(photoId);
-                }
-                catch (FlickrWebException f)
-                {
-                    Console.WriteLine("{0}, retrying", f.GetType());
-                }
-                catch (WebException w)
-                {
-                    Console.WriteLine("{0}, retrying", w.GetType());
-                }
-            }
-            return this.Flickr.PhotosGetInfo(photoId);
+            func = this.Retriers.Aggregate(func, (unknown, retrier) => (() => retrier.Retry(unknown)));
+            return func();
         }
 
+        public PhotoInfo GetPhoto(string photoId)
+        {
+            return this.Retry(() => this.Flickr.PhotosGetInfo(photoId));
+        }
+        
         public Photoset GetPhotoset(string photosetId)
         {
-            for (var i = 1; i < this.Config.Retries; i++)
-            {
-                try
-                {
-                    return this.Flickr.PhotosetsGetInfo(photosetId);
-                }
-                catch (FlickrWebException f)
-                {
-                    Console.WriteLine("{0}, retrying", f.GetType());
-                }
-                catch (WebException w)
-                {
-                    Console.WriteLine("{0}, retrying", w.GetType());
-                }
-            }
-            return this.Flickr.PhotosetsGetInfo(photosetId);
+            return this.Retry(() => this.Flickr.PhotosetsGetInfo(photosetId));
         }
 
         public IEnumerable<string> GetPhotosetIds()
@@ -91,25 +73,9 @@ namespace Illallangi.FlickrLib
             PhotosetCollection collection = null;
             do
             {
-                for (var i = 1; i < this.Config.Retries; i++)
-                {
-                    try
-                    {
-                        collection = this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
-                    }
-                    catch (FlickrWebException f)
-                    {
-                        Console.WriteLine("{0}, retrying", f.GetType());
-                    }
-                    catch (WebException w)
-                    {
-                        Console.WriteLine("{0}, retrying", w.GetType());
-                    }
-                }
-                if (null == collection)
-                {
-                    collection = this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
-                }
+                collection =
+                    this.Retry(
+                        () => this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, PAGESIZE));
                 foreach (var set in collection)
                 {
                     yield return set.PhotosetId;
@@ -120,23 +86,7 @@ namespace Illallangi.FlickrLib
 
         public AllContexts PhotosGetAllContexts(string photoId)
         {
-            AllContexts contexts = null;
-            for (var i = 1; i < this.Config.Retries; i++)
-            {
-                try
-                {
-                    contexts = this.Flickr.PhotosGetAllContexts(photoId);
-                }
-                catch (FlickrWebException f)
-                {
-                    Console.WriteLine("{0}, retrying", f.GetType());
-                }
-                catch (WebException w)
-                {
-                    Console.WriteLine("{0}, retrying", w.GetType());
-                }
-            }
-            return contexts ?? this.Flickr.PhotosGetAllContexts(photoId);
+            return this.Retry(() => this.Flickr.PhotosGetAllContexts(photoId));
         }
 
         public IEnumerable<string> GetPhotosetPhotoIds(string photosetId)
@@ -149,7 +99,11 @@ namespace Illallangi.FlickrLib
             PhotosetPhotoCollection collection = null;
             do
             {
-                collection = this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1, FlickrWrapper.PAGESIZE);
+                collection =
+                    this.Retry(
+                        () =>
+                        this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1,
+                                                       PAGESIZE));
                 foreach (var photo in collection)
                 {
                     yield return photo;
@@ -160,7 +114,7 @@ namespace Illallangi.FlickrLib
 
         public string Upload(string fileName, string title)
         {
-            return this.Flickr.UploadPicture(fileName, title);
+            return this.Retry(() => this.Flickr.UploadPicture(fileName, title));
         }
 
         public PhotosetCollection PhotosetsGetList()
@@ -172,15 +126,15 @@ namespace Illallangi.FlickrLib
         {
             if (clearCache)
             {
-                this.Flickr.PhotosetsGetList();
+                this.Retry(() => this.Flickr.PhotosetsGetList());
                 Flickr.FlushCache(this.Flickr.LastRequest);
             }
-            return this.Flickr.PhotosetsGetList();
+            return this.Retry(() => this.Flickr.PhotosetsGetList());
         }
 
         public Photoset CreatePhotoset(string collectionName, string photoId)
         {
-            return this.Flickr.PhotosetsCreate(collectionName, photoId);
+            return this.Retry(() => this.Flickr.PhotosetsCreate(collectionName, photoId));
         }
 
         #endregion

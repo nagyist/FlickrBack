@@ -55,9 +55,13 @@
     <Compile Include="FlickrModule.cs" />
     <Compile Include="FlickrWrapper.cs" />
     <Compile Include="IConfig.cs" />
+    <Compile Include="IDelayer.cs" />
     <Compile Include="IDriver.cs" />
     <Compile Include="IFlickrWrapper.cs" />
+    <Compile Include="IRetrier.cs" />
     <Compile Include="ProgramBase.cs" />
+    <Compile Include="RandomDelayer.cs" />
+    <Compile Include="Retrier.cs" />
     <Compile Include="XMLConfig.cs" />
   </ItemGroup>
   <ItemGroup>
