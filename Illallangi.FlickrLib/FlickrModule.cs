@@ -4,6 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using FlickrNet;
+using Ninject;
 using Ninject.Modules;
 
 namespace Illallangi.FlickrLib
@@ -38,9 +44,29 @@ namespace Illallangi.FlickrLib
 
         public override void Load()
         {
-            Bind<IConfig>().ToMethod(c => XmlConfig.FromFile()).InSingletonScope();
-            Bind<IFlickrWrapper>().To<FlickrWrapper>().InSingletonScope();
-            Bind<IDriver>().To<T>().WithConstructorArgument("arguments", this.Arguments);
+            Bind<IConfig>()
+                .ToMethod(c => XmlConfig.FromFile()).InSingletonScope();
+
+            Bind<IDelayer>()
+                .To<RandomDelayer>()
+                .InSingletonScope();
+
+            Bind<IRetrier>()
+                .To<Retrier<FlickrException>>()
+                .InSingletonScope();
+
+            Bind<IRetrier>()
+                .To<Retrier<WebException>>()
+                .InSingletonScope();
+            
+            Bind<IFlickrWrapper>()
+                .To<FlickrWrapper>()
+                .InSingletonScope();
+
+            Bind<IDriver>()
+                .To<T>()
+                .InSingletonScope()
+                .WithConstructorArgument("arguments", this.Arguments);
         }
 
         #endregion
