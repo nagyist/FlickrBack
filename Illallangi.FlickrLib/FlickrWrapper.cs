@@ -118,6 +118,27 @@ namespace Illallangi.FlickrLib
             while (collection.Page < collection.Pages);
         }
 
+        public AllContexts PhotosGetAllContexts(string photoId)
+        {
+            AllContexts contexts = null;
+            for (var i = 1; i < this.Config.Retries; i++)
+            {
+                try
+                {
+                    contexts = this.Flickr.PhotosGetAllContexts(photoId);
+                }
+                catch (FlickrWebException f)
+                {
+                    Console.WriteLine("{0}, retrying", f.GetType());
+                }
+                catch (WebException w)
+                {
+                    Console.WriteLine("{0}, retrying", w.GetType());
+                }
+            }
+            return contexts ?? this.Flickr.PhotosGetAllContexts(photoId);
+        }
+
         public IEnumerable<string> GetPhotosetPhotoIds(string photosetId)
         {
             return this.GetPhotosetPhotos(photosetId).Select(photo => photo.PhotoId);
@@ -140,11 +161,6 @@ namespace Illallangi.FlickrLib
         public string Upload(string fileName, string title)
         {
             return this.Flickr.UploadPicture(fileName, title);
-        }
-
-        public AllContexts PhotosGetAllContexts(string photoId)
-        {
-            return this.Flickr.PhotosGetAllContexts(photoId);
         }
 
         public PhotosetCollection PhotosetsGetList()
