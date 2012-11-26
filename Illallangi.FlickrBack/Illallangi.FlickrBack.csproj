@@ -54,6 +54,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Counter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CounterEnumerable.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
