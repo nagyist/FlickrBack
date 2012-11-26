@@ -24,6 +24,7 @@ namespace Illallangi.FlickrLib
         private const int DEFAULTRETRIES = -1;
         private const int DEFAULTMINDELAY = 5;
         private const int DEFAULTMAXDELAY = 60;
+        private const int DEFAULTPAGESIZE = 400;
         
         #endregion
 
@@ -37,6 +38,7 @@ namespace Illallangi.FlickrLib
         private int? currentRetries;
         private int? currentMinDelay;
         private int? currentMaxDelay;
+        private int? currentPageSize;
 
         #endregion
 
@@ -126,6 +128,14 @@ namespace Illallangi.FlickrLib
         {
             get { return this.currentMaxDelay.HasValue ? this.currentMaxDelay.Value : (this.currentMaxDelay = XmlConfig.DEFAULTMAXDELAY).Value; }
             set { this.currentMaxDelay = value; }
+        }
+
+
+        [XmlAttribute("pagesize")]
+        public int PageSize
+        {
+            get { return this.currentPageSize.HasValue ? this.currentPageSize.Value : (this.currentPageSize = XmlConfig.DEFAULTPAGESIZE).Value; }
+            set { this.currentPageSize = value; }
         }
 
         #endregion

@@ -17,7 +17,6 @@ namespace Illallangi.FlickrLib
 
         private readonly IConfig currentConfig;
         private readonly IEnumerable<IRetrier> currentRetriers;
-        private const int PAGESIZE = 10;
 
         #endregion
 
@@ -75,7 +74,7 @@ namespace Illallangi.FlickrLib
             {
                 collection =
                     this.Retry(
-                        () => this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, PAGESIZE));
+                        () => this.Flickr.PhotosetsGetList(null == collection ? 0 : collection.Page + 1, this.Config.PageSize));
                 foreach (var set in collection)
                 {
                     yield return set.PhotosetId;
@@ -102,8 +101,7 @@ namespace Illallangi.FlickrLib
                 collection =
                     this.Retry(
                         () =>
-                        this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1,
-                                                       PAGESIZE));
+                        this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1, this.Config.PageSize));
                 foreach (var photo in collection)
                 {
                     yield return photo;

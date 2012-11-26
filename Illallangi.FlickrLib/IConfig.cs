@@ -25,6 +25,7 @@ namespace Illallangi.FlickrLib
         int Retries { get; }
         int MinDelay { get; }
         int MaxDelay { get; }
+        int PageSize { get; }
 
         #endregion
     }
