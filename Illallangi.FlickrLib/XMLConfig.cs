@@ -13,7 +13,7 @@ using FlickrNet;
 namespace Illallangi.FlickrLib
 {
     [XmlRoot("config")]
-    public sealed class XMLConfig : XmlFileBackedObject<XMLConfig>, IConfig
+    public sealed class XmlConfig : XmlFileBackedObject<XmlConfig>, IConfig
     {
         #region Fields
 
@@ -38,7 +38,7 @@ namespace Illallangi.FlickrLib
 
         #region Constructors
 
-        private XMLConfig()
+        private XmlConfig()
         {
             // NOOP
         }
@@ -52,14 +52,14 @@ namespace Illallangi.FlickrLib
         [XmlAttribute("key")]
         public string ApiKey
         {
-            get { return this.currentApiKey ?? (this.currentApiKey = XMLConfig.DEFAULTAPIKEY); }
+            get { return this.currentApiKey ?? (this.currentApiKey = XmlConfig.DEFAULTAPIKEY); }
             set { this.currentApiKey = value; }
         }
 
         [XmlAttribute("secret")]
         public string ApiSecret
         {
-            get { return this.currentApiSecret ?? (this.currentApiSecret = XMLConfig.DEFAULTAPISECRET); }
+            get { return this.currentApiSecret ?? (this.currentApiSecret = XmlConfig.DEFAULTAPISECRET); }
             set { this.currentApiSecret = value; }
         }
 
@@ -74,8 +74,8 @@ namespace Illallangi.FlickrLib
                         null == this.ApiSecret ||
                         string.Empty == this.ApiKey.Trim() ||
                         string.Empty == this.ApiKey.Trim() ||
-                        XMLConfig.DEFAULTAPIKEY == this.ApiKey ||
-                        XMLConfig.DEFAULTAPISECRET == this.ApiSecret)
+                        XmlConfig.DEFAULTAPIKEY == this.ApiKey ||
+                        XmlConfig.DEFAULTAPISECRET == this.ApiSecret)
                     {
                         throw new Exception("Please ensure Key and Secret are set in the FlickrBack.xml file.");
                     }
@@ -122,11 +122,11 @@ namespace Illallangi.FlickrLib
 
         #region Public Methods
 
-        public static XMLConfig FromFile()
+        public static XmlConfig FromFile()
         {
-            return (File.Exists(XMLConfig.FileName)
-                        ? XMLConfig.FromFile(XMLConfig.FileName)
-                        : new XMLConfig()).Save();
+            return (File.Exists(XmlConfig.FileName)
+                        ? XmlConfig.FromFile(XmlConfig.FileName)
+                        : new XmlConfig()).Save();
         }
 
         #endregion
@@ -146,9 +146,9 @@ namespace Illallangi.FlickrLib
             return this.Flickr.AuthToken = this.Flickr.AuthGetToken(this.Frob).Token;
         }
 
-        private XMLConfig Save()
+        private XmlConfig Save()
         {
-            return this.ToFile(XMLConfig.FileName);
+            return this.ToFile(XmlConfig.FileName);
         }
 
         #endregion

@@ -38,7 +38,7 @@ namespace Illallangi.FlickrLib
 
         public override void Load()
         {
-            Bind<IConfig>().ToMethod(c => XMLConfig.FromFile()).InSingletonScope();
+            Bind<IConfig>().ToMethod(c => XmlConfig.FromFile()).InSingletonScope();
             Bind<IFlickrWrapper>().To<FlickrWrapper>().InSingletonScope();
             Bind<IDriver>().To<T>().WithConstructorArgument("arguments", this.Arguments);
         }
