@@ -13,7 +13,7 @@ using FlickrNet;
 namespace Illallangi.FlickrLib
 {
     [XmlRoot("config")]
-    public sealed class XMLConfig : XMLBackedFile<XMLConfig>, IConfig
+    public sealed class XMLConfig : XmlFileBackedObject<XMLConfig>, IConfig
     {
         #region Fields
 
