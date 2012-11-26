@@ -30,8 +30,8 @@ namespace Illallangi.FlickrLib
         PhotosetCollection PhotosetsGetList();
         PhotosetCollection PhotosetsGetList(bool clearCache);
 
-        #endregion
-
         Photoset CreatePhotoset(string collectionName, string photoId);
+
+        #endregion
     }
 }
