@@ -8,7 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Net;
-using FlickrNet;
+using Illallangi.CountEnum;
 using Illallangi.FlickrLib;
 using Ninject;
 

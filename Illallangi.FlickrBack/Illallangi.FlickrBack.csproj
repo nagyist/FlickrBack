@@ -42,6 +42,9 @@
     <Reference Include="FlickrNet, Version=3.3.1.0, Culture=neutral, PublicKeyToken=2491df59efa5d132, processorArchitecture=MSIL">
       <HintPath>..\packages\FlickrNet.3.3.1\lib\net20\FlickrNet.dll</HintPath>
     </Reference>
+    <Reference Include="Illallangi.CountEnum">
+      <HintPath>..\packages\Illallangi.CountEnum.1.0.21225-CI2328\lib\net35-Client\Illallangi.CountEnum.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net35-Client\Ninject.dll</HintPath>
     </Reference>
@@ -54,10 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Counter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CounterEnumerable.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
