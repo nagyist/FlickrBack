@@ -92,8 +92,17 @@ namespace Illallangi.FlickrLib
         {
             return this.GetPhotosetPhotos(photosetId).Select(photo => photo.PhotoId);
         }
+        public IEnumerable<string> GetPhotosetPhotoIds(string photosetId, MediaType mediaType)
+        {
+            return this.GetPhotosetPhotos(photosetId, mediaType).Select(photo => photo.PhotoId);
+        }
 
         public IEnumerable<Photo> GetPhotosetPhotos(string photosetId)
+        {
+            return this.GetPhotosetPhotos(photosetId, MediaType.All);
+        }
+
+        public IEnumerable<Photo> GetPhotosetPhotos(string photosetId, MediaType mediaType)
         {
             PhotosetPhotoCollection collection = null;
             do
@@ -101,7 +110,7 @@ namespace Illallangi.FlickrLib
                 collection =
                     this.Retry(
                         () =>
-                        this.Flickr.PhotosetsGetPhotos(photosetId, null == collection ? 0 : collection.Page + 1, this.Config.PageSize));
+                        this.Flickr.PhotosetsGetPhotos(photosetId, PhotoSearchExtras.None, PrivacyFilter.None, null == collection ? 0 : collection.Page + 1, this.Config.PageSize, mediaType));
                 foreach (var photo in collection)
                 {
                     yield return photo;

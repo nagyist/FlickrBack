@@ -22,8 +22,10 @@ namespace Illallangi.FlickrLib
         string Upload(string fileName, string title);
 
         IEnumerable<Photo> GetPhotosetPhotos(string photosetId);
+        IEnumerable<Photo> GetPhotosetPhotos(string photosetId, MediaType mediaType);
 
         IEnumerable<string> GetPhotosetPhotoIds(string photosetId);
+        IEnumerable<string> GetPhotosetPhotoIds(string photosetId, MediaType mediaType);
 
         AllContexts PhotosGetAllContexts(string photoId);
 
