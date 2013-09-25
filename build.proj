@@ -1,0 +1,127 @@
+<Project ToolsVersion="4.0" DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Import Project="$(MSBuildProjectDirectory)\tools\MSBuildCommunityTasks\MSBuild.Community.Tasks.Targets"/>
+  
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Release</Configuration>
+    <Version>$(BUILD_NUMBER)</Version>
+    <GitCommitHash>$(BUILD_VCS_NUMBER)</GitCommitHash>
+    <GitCommitHash Condition=" '$(GitCommitHash)' != '' ">$(GitCommitHash.Substring(0, 8))</GitCommitHash>
+    <!-- dev config -->
+    <Version Condition=" '$(Version)' == '' ">0.0.0.1</Version>
+    <SourceDir>$(MSBuildProjectDirectory)\src</SourceDir>
+    <ArtifactsDir>$(MSBuildProjectDirectory)\artifacts</ArtifactsDir>
+    <BuildDir>$(MSBuildProjectDirectory)\build</BuildDir>
+    
+  </PropertyGroup>
+
+  <Target Name="Version">
+
+    <GitVersion LocalPath="$(SourceDir)\..\" Condition=" '$(GitCommitHash)' == '' ">
+      <Output TaskParameter="CommitHash" PropertyName="GitCommitHash" />
+    </GitVersion>
+
+    <AssemblyInfo CodeLanguage="CS"
+                  OutputFile="$(SourceDir)\Illallangi.FlickrBack\AssemblyInfo.cs"
+                  AssemblyTitle="FlickrBack"
+                  AssemblyDescription=""
+                  AssemblyCompany="Illallangi Enterprises"
+                  AssemblyProduct="FlickrBack"
+                  AssemblyCopyright="Copyright © Illallangi Enterprises 2012"
+                  ComVisible="false"
+                  AssemblyInformationalVersion="Built from hash '$(GitCommitHash)'"
+                  Guid="cbb088ec-b39c-41fd-a375-92362e30416e"
+                  AssemblyVersion="$(Version)"
+                  AssemblyFileVersion="$(Version)" />
+
+    <AssemblyInfo CodeLanguage="CS"
+                  OutputFile="$(SourceDir)\Illallangi.FlickrLib\AssemblyInfo.cs"
+                  AssemblyTitle="Illallangi.FlickrLib"
+                  AssemblyDescription=""
+                  AssemblyCompany="Illallangi Enterprises"
+                  AssemblyProduct="Illallangi.FlickrLib"
+                  AssemblyCopyright="Copyright © Illallangi Enterprises 2012"
+                  ComVisible="false"
+                  AssemblyInformationalVersion="Built from hash '$(GitCommitHash)'"
+                  Guid="4354333a-e488-4f7e-b953-e1d40cfff63f"
+                  AssemblyVersion="$(Version)"
+                  AssemblyFileVersion="$(Version)" />
+
+
+    <AssemblyInfo CodeLanguage="CS"
+                  OutputFile="$(SourceDir)\Illallangi.FlickrList\Properties\AssemblyInfo.cs"
+                  AssemblyTitle="Illallangi.FlickrList"
+                  AssemblyDescription=""
+                  AssemblyCompany="Illallangi Enterprises"
+                  AssemblyProduct="Illallangi.FlickrList"
+                  AssemblyCopyright="Copyright © Illallangi Enterprises 2012"
+                  ComVisible="false"
+                  AssemblyInformationalVersion="Built from hash '$(GitCommitHash)'"
+                  Guid="8b76bdaf-24a5-4092-bbff-ca67b604290d"
+                  AssemblyVersion="$(Version)"
+                  AssemblyFileVersion="$(Version)" />
+
+    <Message Text="Building version $(Version) from hash $(GitCommitHash)"  Importance="High" />
+
+  </Target>
+
+  <Target Name="Compile">
+    <Message Text="=========== Compile ===========" Importance="High" />
+
+    <MSBuild Projects="$(SourceDir)\Illallangi.FlickrBack.sln" Properties="Configuration=$(Configuration)" Targets="Rebuild" />
+  </Target>
+
+  <Target Name="Copy" DependsOnTargets="Compile">
+    <Message Text="=========== Copy ===========" Importance="High" />
+
+    <MakeDir Directories="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Illallangi.DropBoxStartMenu.exe"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Illallangi.DropBoxStartMenu.exe.config"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Illallangi.FileBackedObject.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Illallangi.ShellLink.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\log4net.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\log4net.xml"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Ninject.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\Ninject.xml"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\System.Data.SQLite.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+    <Copy SourceFiles="$(SourceDir)\Illallangi.DropBoxStartMenu\bin\$(Configuration)\System.Data.Sqlite.Linq.dll"
+          DestinationFolder="$(BuildDir)\bin" />
+
+  </Target>
+
+  <Target Name="Zip" DependsOnTargets="Copy">
+    <Message Text="=========== Zip ===========" Importance="High" />
+
+    <CreateItem Include="$(BuildDir)\bin\*.*" >
+      <Output ItemName="ZipFiles" TaskParameter="Include"/>
+    </CreateItem>
+
+    <Zip ZipFileName="$(ArtifactsDir)\Illallangi Enterprises DropBox Start Menu Linker v$(Version).zip" WorkingDirectory="$(BuildDir)\bin" Files="@(ZipFiles)" />
+  </Target>
+
+  <Target Name="All" DependsOnTargets="Zip">
+
+    <Message Text="=========== All Done ===========" Importance="High" />
+
+  </Target>
+
+</Project>
