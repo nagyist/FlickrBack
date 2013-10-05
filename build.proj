@@ -15,6 +15,11 @@
     
   </PropertyGroup>
 
+  <ItemGroup>
+    <Candle Include="$(MSBuildProjectDirectory)\tools\wix\candle.exe" />
+    <Light Include="$(MSBuildProjectDirectory)\tools\wix\light.exe" />
+  </ItemGroup>
+
   <Target Name="Version">
 
     <GitVersion LocalPath="$(SourceDir)\..\" Condition=" '$(GitCommitHash)' == '' ">
@@ -118,7 +123,17 @@
     <Zip ZipFileName="$(ArtifactsDir)\Illallangi Enterprises DropBox Start Menu Linker v$(Version).zip" WorkingDirectory="$(BuildDir)\bin" Files="@(ZipFiles)" />
   </Target>
 
-  <Target Name="All" DependsOnTargets="Zip">
+  <Target Name="MSI" DependsOnTargets="Copy">
+    <Message Text="=========== MSI ===========" Importance="High" />
+
+    <MakeDir Directories="$(BuildDir)\wix" />
+
+    <Exec Command='"@(Candle)" -nologo -wx -dsource="$(BuildDir)\bin" -dfavicon="$(SourceDir)\Illallangi.DropBoxStartMenu\favicon.ico" -out "$(BuildDir)\wix\build.wixobj" "$(MSBuildProjectDirectory)\build.wxs"' />
+
+    <Exec Command='"@(Light)" -nologo -wx -ext WixUIExtension -out "$(ArtifactsDir)\Illallangi Enterprises DropBox Start Menu Linker v$(Version).msi" -pdbout "$(BuildDir)\wix\build.wixpdb" "$(BuildDir)\wix\build.wixobj"' />
+  </Target>
+
+  <Target Name="All" DependsOnTargets="Zip;MSI">
 
     <Message Text="=========== All Done ===========" Importance="High" />
 
